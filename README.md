@@ -110,22 +110,71 @@ npm run dev                  # http://localhost:5173
 - Optional bookmarking (JWT protected) and simple auth form.
 - Bookmark page with optimistic refresh via React Query.
 
-## Deployment Guide
+## 🚀 Deployment
 
-### Backend → Render
+This application is deployed using:
+- **Backend**: [Render](https://render.com) - Express.js API
+- **Frontend**: [Vercel](https://vercel.com) - React/Vite application
+- **Database**: [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) - Cloud database
+- **CI/CD**: [GitHub Actions](https://github.com/features/actions) - Automated testing and deployment
 
-1. Push repo to GitHub.
-2. Create a Render Web Service pointing to `backend`.
-3. Build command: `npm install`. Start command: `npm run start`.
-4. Add env vars: `MONGO_URI`, `PORT`, `JWT_SECRET`, `CLIENT_URL` (include Vercel origin).
-5. Deploy; note the base URL (e.g., `https://health-api.onrender.com`).
+### Quick Deployment Links
 
-### Frontend → Vercel
+- **Frontend URL**: [Add your Vercel deployment URL here]
+- **Backend API URL**: [Add your Render deployment URL here]
+- **Health Check**: [Add your backend health check URL here]
 
-1. Import GitHub repo into Vercel, set root to `frontend`.
-2. Framework preset: Vite.
-3. Add `VITE_API_URL=https://health-api.onrender.com/api`.
-4. Deploy; Vercel will auto-build on push.
+### Deployment Documentation
+
+For detailed deployment instructions, see **[DEPLOYMENT.md](./DEPLOYMENT.md)** which includes:
+
+- Step-by-step deployment guide for Render and Vercel
+- MongoDB Atlas setup instructions
+- Environment variable configuration
+- CI/CD pipeline setup
+- Monitoring and maintenance procedures
+- Troubleshooting guide
+
+### Quick Start Deployment
+
+#### Backend → Render
+
+1. Push repo to GitHub
+2. Create a Render Web Service pointing to `backend` directory
+3. Build command: `npm install`
+4. Start command: `npm run start`
+5. Add environment variables:
+   - `MONGO_URI` - MongoDB Atlas connection string
+   - `PORT` - 10000 (Render default)
+   - `JWT_SECRET` - Strong random string
+   - `JWT_EXPIRES_IN` - 7d
+   - `CLIENT_URL` - Your Vercel frontend URL
+   - `NODE_ENV` - production
+6. Deploy and note the base URL (e.g., `https://health-api.onrender.com`)
+
+#### Frontend → Vercel
+
+1. Import GitHub repo into Vercel
+2. Set root directory to `frontend`
+3. Framework preset: Vite (auto-detected)
+4. Add environment variable:
+   - `VITE_API_URL` - Your Render backend URL + `/api`
+5. Deploy; Vercel will auto-build on push
+
+### CI/CD Pipeline
+
+The repository includes GitHub Actions workflows for:
+
+- **Continuous Integration**: Automated testing and linting on pull requests
+- **Continuous Deployment**: Automatic deployment to production on main branch
+
+Workflows located in `.github/workflows/`:
+- `frontend-ci.yml` - Frontend testing and building
+- `backend-ci.yml` - Backend testing
+- `frontend-cd.yml` - Frontend deployment to Vercel
+- `backend-cd.yml` - Backend deployment to Render
+
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for CI/CD setup instructions.
 
 ## Data Flow Diagram (Detailed)
 
@@ -157,12 +206,128 @@ npm run dev                  # http://localhost:5173
 - Push notifications for newly published topics.
 - Integrate analytics (PostHog, Segment) to track engagement.
 
-## Submission Checklist
+## 📋 Production Optimizations
 
-- [x] Backend & frontend directories with clear structure.
-- [x] `.env` examples for both sides.
-- [x] README and deployment notes.
-- [x] REST API covering topics, categories, auth, bookmarks.
-- [x] React Router views, custom hooks, API service, Tailwind styling.
-- [x] Optional auth + bookmarking workflow.
+### Backend Optimizations
+- ✅ Security headers (X-Content-Type-Options, X-Frame-Options, etc.)
+- ✅ Production error handling (no stack traces in production)
+- ✅ MongoDB connection pooling (maxPoolSize: 10, minPoolSize: 2)
+- ✅ Production logging with morgan
+- ✅ Health check endpoint with uptime monitoring
+- ✅ Process error handlers (unhandledRejection, uncaughtException)
+- ✅ Request size limits (10mb)
+
+### Frontend Optimizations
+- ✅ Code splitting with React.lazy()
+- ✅ Vendor chunk separation (react, react-dom, react-router-dom)
+- ✅ Production build optimizations (terser minification)
+- ✅ Console removal in production builds
+- ✅ Static asset caching headers
+- ✅ Security headers via Vercel configuration
+
+## 🔧 Environment Variables
+
+### Backend Environment Variables
+
+See `backend/env.example` for template. Required variables:
+
+```env
+PORT=5000
+MONGO_URI=mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/healthapp
+JWT_SECRET=your-secret-key
+JWT_EXPIRES_IN=7d
+CLIENT_URL=http://localhost:5173,https://your-vercel-app.vercel.app
+NODE_ENV=production
+```
+
+### Frontend Environment Variables
+
+See `frontend/env.example` for template. Required variables:
+
+```env
+VITE_API_URL=http://localhost:5000/api
+```
+
+For production, set `VITE_API_URL` to your Render backend URL in Vercel.
+
+## 📊 Monitoring
+
+### Health Checks
+- **Backend**: `GET /health` - Returns server status, uptime, and environment
+- **Frontend**: Built-in Vercel health monitoring
+
+### Logging
+- Backend uses `morgan` for HTTP request logging
+- Production logs available in Render dashboard
+- Frontend errors visible in browser console and Vercel logs
+
+### Error Tracking
+Consider adding error tracking services:
+- [Sentry](https://sentry.io) - Error tracking and monitoring
+- [LogRocket](https://logrocket.com) - Session replay and error tracking
+
+## 📁 Project Files
+
+```
+HealthApp/
+├── .github/
+│   └── workflows/          # GitHub Actions CI/CD workflows
+│       ├── frontend-ci.yml
+│       ├── backend-ci.yml
+│       ├── frontend-cd.yml
+│       └── backend-cd.yml
+├── backend/                # Express API
+│   ├── config/             # DB connection with pooling
+│   ├── controllers/        # Route handlers
+│   ├── middleware/         # Auth, validation, errors, logging
+│   ├── models/             # Mongoose schemas
+│   ├── routes/             # API routes
+│   ├── utils/              # Helpers
+│   ├── server.js           # Production-optimized server
+│   ├── package.json
+│   └── env.example
+├── frontend/               # React/Vite app
+│   ├── src/
+│   │   ├── components/     # React components
+│   │   ├── pages/          # Route pages (lazy loaded)
+│   │   ├── hooks/          # React Query hooks
+│   │   ├── services/       # API client
+│   │   └── context/        # Global state
+│   ├── vite.config.ts      # Production build config
+│   ├── vercel.json         # Vercel deployment config
+│   ├── package.json
+│   └── env.example
+├── render.yaml             # Render deployment config
+├── DEPLOYMENT.md           # Comprehensive deployment guide
+└── README.md               # This file
+```
+
+## ✅ Submission Checklist
+
+### Application Requirements
+- [x] Backend & frontend directories with clear structure
+- [x] `.env` examples for both sides
+- [x] README and deployment notes
+- [x] REST API covering topics, categories, auth, bookmarks
+- [x] React Router views, custom hooks, API service, Tailwind styling
+- [x] Optional auth + bookmarking workflow
+
+### Deployment Requirements
+- [x] Backend deployed to Render
+- [x] Frontend deployed to Vercel
+- [x] MongoDB Atlas cluster configured
+- [x] Environment variables configured for production
+- [x] CI/CD pipelines with GitHub Actions
+- [x] Health check endpoints implemented
+- [x] Production optimizations applied
+- [x] Security headers configured
+- [x] Comprehensive deployment documentation
+
+### Documentation Requirements
+- [x] Deployment URLs in README
+- [x] Step-by-step deployment guide (DEPLOYMENT.md)
+- [x] Environment variable templates
+- [x] CI/CD configuration files
+- [x] Monitoring and maintenance procedures
+- [x] Troubleshooting guide
 
