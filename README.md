@@ -120,9 +120,9 @@ This application is deployed using:
 
 ### Quick Deployment Links
 
-- **Frontend URL**: [Add your Vercel deployment URL here]
-- **Backend API URL**: [Add your Render deployment URL here]
-- **Health Check**: [Add your backend health check URL here]
+- **Frontend URL**: [https://health-app-final-project-dyqo.vercel.app/](https://health-app-final-project-dyqo.vercel.app/)
+- **Backend API URL**: [https://healthapp-backend-cauz.onrender.com/api](https://healthapp-backend-cauz.onrender.com/api)
+- **Health Check**: [https://healthapp-backend-cauz.onrender.com/health](https://healthapp-backend-cauz.onrender.com/health)
 
 ### Deployment Documentation
 
