@@ -1,10 +1,10 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
+import { useAuth } from '@clerk/clerk-react';
 import { setAuthToken } from '../services/api';
 
 type AppContextState = {
   token: string | null;
-  setToken: (token: string | null) => void;
   search: string;
   setSearch: (value: string) => void;
   selectedCategory: string;
@@ -14,30 +14,53 @@ type AppContextState = {
 const AppContext = createContext<AppContextState | undefined>(undefined);
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
-  const [token, setTokenState] = useState<string | null>(() =>
-    typeof window !== 'undefined' ? localStorage.getItem('token') : null
-  );
+  const { isSignedIn, getToken } = useAuth();
+  const [token, setToken] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
 
-  const setToken = (value: string | null) => {
-    setTokenState(value);
-    if (typeof window !== 'undefined') {
-      if (value) {
-        localStorage.setItem('token', value);
-      } else {
-        localStorage.removeItem('token');
-      }
-    }
-    setAuthToken(value);
-  };
-
   useEffect(() => {
-    setAuthToken(token);
-  }, [token]);
+    let isMounted = true;
+
+    const syncToken = async () => {
+      if (!isSignedIn) {
+        if (isMounted) {
+          setToken(null);
+          setAuthToken(null);
+        }
+        return;
+      }
+
+      try {
+        const authToken = await getToken();
+        if (isMounted) {
+          setToken(authToken ?? null);
+          setAuthToken(authToken);
+        }
+      } catch (error) {
+        console.error('Unable to fetch Clerk token', error);
+        if (isMounted) {
+          setToken(null);
+          setAuthToken(null);
+        }
+      }
+    };
+
+    void syncToken();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [isSignedIn, getToken]);
 
   const value = useMemo(
-    () => ({ token, setToken, search, setSearch, selectedCategory, setSelectedCategory }),
+    () => ({
+      token,
+      search,
+      setSearch,
+      selectedCategory,
+      setSelectedCategory,
+    }),
     [token, search, selectedCategory]
   );
 

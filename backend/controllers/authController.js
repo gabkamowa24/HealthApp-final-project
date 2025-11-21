@@ -42,7 +42,18 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 const getProfile = asyncHandler(async (req, res) => {
-  res.json(req.user);
+  const auth = req.auth;
+
+  if (!auth?.userId) {
+    res.status(401);
+    throw new Error('Not authorized');
+  }
+
+  res.json({
+    userId: auth.userId,
+    sessionId: auth.sessionId,
+    email: auth.sessionClaims?.email,
+  });
 });
 
 module.exports = { registerUser, loginUser, getProfile };

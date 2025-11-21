@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 
 const bookmarkSchema = new mongoose.Schema(
   {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+    userId: {
+      type: String,
       required: true,
+      index: true,
     },
     topic: {
       type: mongoose.Schema.Types.ObjectId,
@@ -16,7 +16,7 @@ const bookmarkSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-bookmarkSchema.index({ user: 1, topic: 1 }, { unique: true });
+bookmarkSchema.index({ userId: 1, topic: 1 }, { unique: true });
 
 module.exports = mongoose.model('Bookmark', bookmarkSchema);
 

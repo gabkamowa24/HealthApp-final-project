@@ -65,6 +65,17 @@ Example:
 mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/healthapp?retryWrites=true&w=majority
 ```
 
+### (Optional) Seed Sample Content
+
+Populate the database with ready-made categories and disease topics (malaria, HIV, TB, hypertension, diabetes, sickle cell) by running:
+
+```bash
+cd backend
+npm run seed
+```
+
+> Warning: the seed script deletes all existing categories and topics before inserting the curated data. Run it only on environments where this is acceptable (local development or fresh staging databases).
+
 ## Backend Deployment (Render)
 
 ### Step 1: Prepare Repository

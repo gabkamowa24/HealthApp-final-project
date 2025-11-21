@@ -68,6 +68,18 @@ npm run dev
 - `PORT` – default 5000
 - `JWT_SECRET` and `JWT_EXPIRES_IN`
 - `CLIENT_URL` – comma-separated origins for CORS
+- `CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY`
+
+### Sample Data Seeding
+
+Seed categories and disease topics (malaria, HIV, TB, hypertension, diabetes, sickle cell) with:
+
+```bash
+cd backend
+npm run seed
+```
+
+> The script clears existing categories and topics before inserting fresh data. Make sure `backend/.env` points to the database you intend to modify.
 
 ### Key API Routes
 
