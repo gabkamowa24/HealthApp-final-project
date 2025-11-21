@@ -233,7 +233,7 @@ See `backend/env.example` for template. Required variables:
 
 ```env
 PORT=5000
-MONGO_URI=mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/healthapp
+MONGO_URI=xxxx
 JWT_SECRET=your-secret-key
 JWT_EXPIRES_IN=7d
 CLIENT_URL=http://localhost:5173,https://your-vercel-app.vercel.app

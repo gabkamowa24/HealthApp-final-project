@@ -95,7 +95,7 @@ In Render dashboard, go to "Environment" tab and add:
 ```
 NODE_ENV=production
 PORT=10000
-MONGO_URI=mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/healthapp
+MONGO_URI=xxxx
 JWT_SECRET=<generate-a-strong-random-string>
 JWT_EXPIRES_IN=7d
 CLIENT_URL=https://your-vercel-app.vercel.app,http://localhost:5173
