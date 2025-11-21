@@ -1,4 +1,5 @@
-import { FormEvent, useState } from 'react';
+import type { FormEvent } from 'react';
+import { useState } from 'react';
 import { login, register } from '../services/api';
 import { useAppContext } from '../context/AppContext';
 import { StatusMessage } from './StatusMessage';

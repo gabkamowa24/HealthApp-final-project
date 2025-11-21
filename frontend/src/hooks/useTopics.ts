@@ -2,7 +2,9 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchTopic, fetchTopics } from '../services/api';
 import type { Topic } from '../types';
 
-export const useTopics = (params?: Record<string, string>) =>
+type TopicQueryParams = Record<string, string | undefined>;
+
+export const useTopics = (params?: TopicQueryParams) =>
   useQuery({
     queryKey: ['topics', params],
     queryFn: () => fetchTopics(params),

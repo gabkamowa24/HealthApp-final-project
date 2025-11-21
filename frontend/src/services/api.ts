@@ -15,8 +15,19 @@ export const setAuthToken = (token?: string | null) => {
   }
 };
 
-export const fetchTopics = async (params?: Record<string, string>) => {
-  const { data } = await apiClient.get<Topic[]>('/topics', { params });
+type TopicQueryParams = Record<string, string | undefined>;
+
+const sanitizeParams = (params?: TopicQueryParams) => {
+  if (!params) return undefined;
+  return Object.fromEntries(
+    Object.entries(params).filter(
+      ([, value]) => value !== undefined && value !== null && value !== ''
+    )
+  ) as Record<string, string>;
+};
+
+export const fetchTopics = async (params?: TopicQueryParams) => {
+  const { data } = await apiClient.get<Topic[]>('/topics', { params: sanitizeParams(params) });
   return data;
 };
 
